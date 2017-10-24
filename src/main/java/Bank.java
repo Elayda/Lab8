@@ -1,3 +1,4 @@
+
 /**
  * Implement a bank class.
  * <p>
@@ -7,10 +8,17 @@
  *
  * @see <a href="https://cs125.cs.illinois.edu/lab/8/">Lab 8 Description</a>
  */
+/**
+ * This is creating the bank which will hold our functionality.
+ */
 public class Bank {
-
+    /**
+     * This is the name of our bank which MUST be attached to all of the accounts.
+     */
     public String bankName;
-
+    /**
+     * This is the default constructor.
+     */
     public Bank() {
         bankName = "Illini Bank";
     }
@@ -29,6 +37,17 @@ public class Bank {
         /*
          * Implement this function
          */
+        if ((bankAccount.getMoney() - amount) > 0) {
+            bankAccount.withdrawMoney(amount);
+            System.out.println(
+                    "New Balance after withdrawal from account " + bankAccount.getAccountNumber()
+                            + " :" + bankAccount.getMoney());
+            return true;
+        }
+        System.out.println(bankAccount.getAccountNumber()
+                + "Does not have enough money to perform this action.");
+        return false;
+
     }
 
     /**
@@ -39,12 +58,16 @@ public class Bank {
      *
      * @param bankAccount to deposit money to.
      * @param amount to deposit
-     * @return boolean
+     * @return boolean regarding success or failure.
      */
     public boolean depositMoney(final BankAccount bankAccount, final double amount) {
         /*
          * Implement this function
          */
+        bankAccount.depositMoney(amount);
+        System.out.println("New Balance after deposit into account " + bankAccount.getAccountNumber()
+                + " :" + bankAccount.getMoney());
+        return true;
     }
 
     /**
@@ -64,6 +87,20 @@ public class Bank {
         /*
          * Implement this function
          */
+        if ((source.getMoney() - amount) > 0) {
+            source.withdrawMoney(amount);
+            destination.depositMoney(amount);
+            System.out.println("New Balance after transfer out account " + source.getAccountNumber()
+                    + " :" + source.getMoney());
+            System.out.println(
+                    "New Balance after transfer into account " + destination.getAccountNumber()
+                            + " :" + destination.getMoney());
+            return true;
+        } else {
+            System.out.println(source.getAccountNumber()
+                    + "Does not have enough money to perform this action.");
+            return false;
+        }
     }
 
     /**
@@ -77,18 +114,20 @@ public class Bank {
         /*
          * Implement this function
          */
+        bankAccount.setOwner(name);
     }
-
+    /** Declaring the number of accounts. This will be interfaced */
     public static int totalAccounts = 0;
     /**
      * Uses static variable to get number of bank accounts opened.
      *
-     * @return the total number of accounts
+     * @return the total number of accounts at the bank
      */
     public static int getNumberOfAccount() {
         /*
          * Implement this function
          */
+        return totalAccounts;
     }
 
     /**
@@ -103,10 +142,10 @@ public class Bank {
         System.out.println("We are excited to have you banking with us!\n\n");
 
         // Create Bank Accounts
-        BankAccount account1 = new BankAccount("John Doe", BankAccountType.CHECKINGS);
+        BankAccount account1 = new BankAccount("John Doe", BankAccount.BankAccountType.CHECKINGS);
         System.out.println("Bank account for John Doe created");
 
-        BankAccount account2 = new BankAccount("Jony Ive", BankAccountType.STUDENT);
+        BankAccount account2 = new BankAccount("Jony Ive", BankAccount.BankAccountType.STUDENT);
         System.out.println("Bank account for Johy Ive created\n\n");
 
         // Deposit money to both accounts and print new balance
